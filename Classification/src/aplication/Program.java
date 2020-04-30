@@ -3,10 +3,12 @@ package aplication;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Iterator;
 
 import entities.Column;
 import entities.Train;
 import entities.enums.Criteria;
+
 
 public class Program {
 
@@ -45,9 +47,21 @@ public class Program {
 				}
 				String[] entries = line.split(",");
 				// add entries from 'X' columns (entries.length - 1)
-				for (int i = 0; i < entries.length - 1; i++) {
+				
+				//suggestion : during a lecture, the teacher said that she will check if we access an element of a list with get(i) in a for loop
+				//it's apparently bad to do it because at each i-iteration, you start from the beginning of the list and you go through it till the i-element, which is a loss of time
+				
+				Iterator<Column> iter = train.getSamples().listIterator();
+				while(iter.hasNext()) {
+					for(int i = 0;i<entries.length-1;i++) {
+						iter.next().getArrayOfEntries().add(Integer.valueOf(entries[i]));
+					}
+				}
+				/*for (int i = 0; i < entries.length - 1; i++) {
 					train.getSamples().get(i).getArrayOfEntries().add(Integer.valueOf(entries[i]));
 				}
+				*/
+				
 				// last element is column C
 				Integer entrieColumnC = Integer.valueOf(entries[entries.length - 1]);
 				train.getColumnC().getArrayOfEntries().add(entrieColumnC);

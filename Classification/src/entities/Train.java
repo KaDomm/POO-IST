@@ -1,6 +1,5 @@
 package entities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import entities.enums.Criteria;
@@ -14,7 +13,7 @@ public class Train {
 
 	Criteria criteria;
 
-	public Train(List<Column> samples, Column columnC, Integer numberOfLines, Integer numberOfColumnsX,
+	protected Train(List<Column> samples, Column columnC, Integer numberOfLines, Integer numberOfColumnsX,
 			Criteria criteria) {
 		super();
 		this.samples = samples;
@@ -24,10 +23,8 @@ public class Train {
 		this.criteria = criteria;
 	}
 
-	public Train(Criteria criteria) {
+	public Train() {
 		super();
-		this.criteria = criteria;
-		this.samples = new ArrayList<Column>();
 	}
 
 	public List<Column> getSamples() {
@@ -72,7 +69,7 @@ public class Train {
 
 	@Override
 	public String toString() {
-		return "samples: " + samples + ", \n columnC: \n" + columnC + ", \n criteria: " + criteria;
+		return "\nsamples: \n" + samples + " \n\n columnC: " + columnC + " \n\n criteria: " + criteria;
 	}
 
 }

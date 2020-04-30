@@ -8,17 +8,15 @@ public class Column {
 	private ArrayList<Integer> arrayOfEntries;
 	Integer r;
 
-	public Column(String name, ArrayList<Integer> arrayOfEntries, Integer r) {
+	protected Column(String name, ArrayList<Integer> arrayOfEntries, Integer r) {
 		super();
 		this.name = name;
 		this.arrayOfEntries = arrayOfEntries;
 		this.r = r;
 	}
 
-	public Column(String name) {
+	public Column() {
 		super();
-		this.name = name;
-		this.arrayOfEntries = new ArrayList<>();
 	}
 
 	public String getName() {
@@ -49,9 +47,9 @@ public class Column {
 	public String toString() {
 		String entries = "";
 		for (Integer entrie : arrayOfEntries) {
-			entries = entries + " \n - " + entrie;
+			entries = entries + " " + entrie;
 		}
-		return "name: " + name + "\n entries: \n" + entries;
+		return "\nname: " + name + "\n entries: \n" + entries + "\n";
 	}
 
 }

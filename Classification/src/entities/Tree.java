@@ -7,12 +7,13 @@ public class Tree {
 	List<String> parentConfig;
 	Double alfa;
 
+	// constructors
 	public Tree(List<String> parentConfig, Double alfa) {
-		super();
 		this.parentConfig = parentConfig;
 		this.alfa = alfa;
 	}
 
+	// getters and setter
 	public List<String> getParentConfig() {
 		return parentConfig;
 	}

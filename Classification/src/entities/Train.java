@@ -13,9 +13,9 @@ public class Train {
 
 	Criteria criteria;
 
+	// constructors
 	protected Train(List<Column> samples, Column columnC, Integer numberOfLines, Integer numberOfColumnsX,
 			Criteria criteria) {
-		super();
 		this.samples = samples;
 		this.columnC = columnC;
 		this.numberOfLines = numberOfLines;
@@ -27,6 +27,7 @@ public class Train {
 		super();
 	}
 
+	// getters and setter
 	public List<Column> getSamples() {
 		return samples;
 	}

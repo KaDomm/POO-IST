@@ -8,8 +8,8 @@ public class Column {
 	private ArrayList<Integer> arrayOfEntries;
 	Integer r;
 
+	// constructors
 	protected Column(String name, ArrayList<Integer> arrayOfEntries, Integer r) {
-		super();
 		this.name = name;
 		this.arrayOfEntries = arrayOfEntries;
 		this.r = r;
@@ -19,6 +19,7 @@ public class Column {
 		super();
 	}
 
+	// getters and setter
 	public String getName() {
 		return name;
 	}

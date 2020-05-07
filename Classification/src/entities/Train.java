@@ -1,4 +1,5 @@
 package entities;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,71 +27,92 @@ public class Train {
 	public Train() {
 		super();
 	}
-	//Method to calculate Nijkc taking ijkc as parameters.
-	// to be tested and optimized (get(i) in for loop is bad and brings a large computational time)
+
+	// Method to calculate Nijkc taking ijkc as parameters.
+	// to be tested and optimized (get(i) in for loop is bad and brings a large
+	// computational time)
 	public Integer Nijkc(int i, int j, int k, int c) {
 		Integer Nijkc = 0;
-		//case with no parents
-		if(i == 0) {
-			int xik = samples.get(i).getArrayOfEntries().get(k);
-			for (int n=0;n<samples.get(i).getR();n++) {
-				if (columnC.getArrayOfEntries().get(n) == c && samples.get(i).getArrayOfEntries().get(n) == xik) {
+		// case with no parents
+		Column columnI = samples.get(i - 1);
+		int kTh = k - 1;
+		int cTh = c - 1;
+		// protect outside
+		if (j > columnI.getR() - 1) {
+			return null;
+		}
+
+		if (i == 1) {
+			for (int n = 0; n < columnI.getArrayOfEntries().size(); n++) {
+				if (this.columnC.getArrayOfEntries().get(n) == cTh && columnI.getArrayOfEntries().get(n) == kTh) {
 					Nijkc++;
 				}
 			}
 		}
-		//case with parents
+		// case with parents
 		else {
-			int xik = samples.get(i).getArrayOfEntries().get(k);
-			int wij = samples.get(i-1).getArrayOfEntries().get(j);
-			for (int n=0;n<samples.get(i).getR();n++) {
-				if (columnC.getArrayOfEntries().get(n) == c && samples.get(i).getArrayOfEntries().get(n) == xik && samples.get(i-1).getArrayOfEntries().get(n) == wij) {
+			Column columnParent = samples.get(i - 2);
+			// protect outside
+			if (j > columnParent.getR() - 1) {
+				return null;
+			}
+			int w = j - 1;
+			for (int n = 0; n < columnI.getArrayOfEntries().size(); n++) {
+				if (this.columnC.getArrayOfEntries().get(n) == cTh && columnI.getArrayOfEntries().get(n) == kTh
+						&& columnParent.getArrayOfEntries().get(n) == w) {
 					Nijkc++;
 				}
 			}
 		}
 		return Nijkc;
 	}
-		
-	public double alphaLL(int index){
-		//index is i;
+
+	public Integer SumKNijc(int i, int j, int c) {
+		Integer kNijc = 0;
+
+		return kNijc;
+	}
+
+	public double alphaLL(int index) {
+		// index is i;
 		double alpha = 0;
 		Column ToCalculate = samples.get(index);
-		Column ParentToCalculate = samples.get(index-1);
-		//2D Arraylist containing the valuu of the Sum NJ depending on i,k. the first column is the value c=0; and the second column is value of c=1;
+		Column ParentToCalculate = samples.get(index - 1);
+		// 2D Arraylist containing the valuu of the Sum NJ depending on i,k. the first
+		// column is the value c=0; and the second column is value of c=1;
 		ArrayList<ArrayList<Integer>> NJ = new ArrayList<ArrayList<Integer>>();
-		//Nj here is the sum NJ with the kth value;
+		// Nj here is the sum NJ with the kth value;
 		Integer Nj;
-		//2D Arraylist containing the valuu of the Sum NK depending on i,j. the first column is the value c=0; and the second column is value of c=1;
+		// 2D Arraylist containing the valuu of the Sum NK depending on i,j. the first
+		// column is the value c=0; and the second column is value of c=1;
 		ArrayList<ArrayList<Integer>> NK = new ArrayList<ArrayList<Integer>>();
-		//Nk here is the sum NK with the jth value;
+		// Nk here is the sum NK with the jth value;
 		Integer Nk;
-		//Nc with c = 0 in the first column, c = 1 in the second column
+		// Nc with c = 0 in the first column, c = 1 in the second column
 		ArrayList<Integer> NC = new ArrayList<Integer>();
 		int Nc0 = 0;
 		int Nc1 = 0;
 		int N = ToCalculate.getR();
-		for(int c=0;c<1;c++) {
+		for (int c = 0; c < 1; c++) {
 			ArrayList<Integer> NJc = new ArrayList<Integer>();
 			ArrayList<Integer> NKc = new ArrayList<Integer>();
-			for(int k=0;k<ToCalculate.getR();k++) {
+			for (int k = 0; k < ToCalculate.getR(); k++) {
 				Nj = 0;
-				for(int j=0;j<ParentToCalculate.getR();j++) {
+				for (int j = 0; j < ParentToCalculate.getR(); j++) {
 					Nj = Nj + this.Nijkc(index, j, k, c);
 				}
 				NJc.add(Nj);
 			}
-			for(int j=0;j<ParentToCalculate.getR();j++) {
+			for (int j = 0; j < ParentToCalculate.getR(); j++) {
 				Nk = 0;
-				for(int k=0;k<ToCalculate.getR();k++) {
+				for (int k = 0; k < ToCalculate.getR(); k++) {
 					Nk = Nk + this.Nijkc(index, j, k, c);
 				}
 				NKc.add(Nk);
 			}
-			if(columnC.getArrayOfEntries().get(c) == 0) {
+			if (columnC.getArrayOfEntries().get(c) == 0) {
 				Nc0++;
-			}
-			else{
+			} else {
 				Nc1++;
 			}
 			NJ.add(NJc);
@@ -98,26 +120,29 @@ public class Train {
 		}
 		NC.add(Nc0);
 		NC.add(Nc1);
-		
-		for(int j=0;j<ParentToCalculate.getR();j++) {
-			for(int k=0;k<ToCalculate.getR();k++) {
-				for(int c=0;c<1;c++) {
+
+		for (int j = 0; j < ParentToCalculate.getR(); j++) {
+			for (int k = 0; k < ToCalculate.getR(); k++) {
+				for (int c = 0; c < 1; c++) {
 					double Nijkc = this.Nijkc(index, j, k, c);
-					alpha = alpha + Nijkc/N + this.log2(Nijkc*NC.get(c)/(NJ.get(c).get(k)*NK.get(k).get(j)));
+					alpha = alpha + Nijkc / N + this.log2(Nijkc * NC.get(c) / (NJ.get(c).get(k) * NK.get(k).get(j)));
 				}
 			}
 		}
-		
+
 		return alpha;
 	}
-	public int log2(int n){
-	    if(n <= 0) throw new IllegalArgumentException();
-	    return 31 - Integer.numberOfLeadingZeros(n);
+
+	public int log2(int n) {
+		if (n <= 0)
+			throw new IllegalArgumentException();
+		return 31 - Integer.numberOfLeadingZeros(n);
 	}
-	public int log2(double f){
-	    return (int)Math.floor(Math.log(f)/Math.log(2.0));
+
+	public int log2(double f) {
+		return (int) Math.floor(Math.log(f) / Math.log(2.0));
 	}
-	
+
 	// getters and setter
 	public List<Column> getSamples() {
 		return samples;
@@ -163,6 +188,5 @@ public class Train {
 	public String toString() {
 		return "\nsamples: \n" + samples + " \n\n columnC: " + columnC + " \n\n criteria: " + criteria;
 	}
-	
 
 }

@@ -6,7 +6,7 @@ public class Column {
 
 	private String name;
 	private ArrayList<Integer> arrayOfEntries;
-	Integer r;
+	Integer r = 0;
 
 	// constructors
 	protected Column(String name, ArrayList<Integer> arrayOfEntries, Integer r) {
@@ -50,7 +50,7 @@ public class Column {
 		for (Integer entrie : arrayOfEntries) {
 			entries = entries + " " + entrie;
 		}
-		return "\nname: " + name + "\n entries: \n" + entries + "\n";
+		return "\nname: " + name + "\n entries: \n" + entries + "\n" + this.r;
 	}
 
 }

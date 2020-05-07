@@ -74,13 +74,20 @@ public class Program {
 				Iterator<Column> iter = train.getSamples().listIterator();
 				while (iter.hasNext()) {
 					for (int i = 0; i < entries.length - 1; i++) {
-						iter.next().getArrayOfEntries().add(Integer.valueOf(entries[i]));
+						Column column = iter.next();
+						column.getArrayOfEntries().add(Integer.valueOf(entries[i]));
+						if (Integer.valueOf(entries[i]) > column.getR() - 1) {
+							column.setR(Integer.valueOf(entries[i]) + 1);
+						}
 					}
 				}
 
 				// last element is column C
 				Integer entrieColumnC = Integer.valueOf(entries[entries.length - 1]);
 				train.getColumnC().getArrayOfEntries().add(entrieColumnC);
+				if (Integer.valueOf(entries[entries.length - 1]) > train.getColumnC().getR() - 1) {
+					train.getColumnC().setR(Integer.valueOf(entries[entries.length - 1]) + 1);
+				}
 			}
 
 		} catch (IOException e) {
@@ -89,6 +96,8 @@ public class Program {
 
 		// after reading the file we need to create a graph with different order of the
 		// samples
+
+		System.out.println("resul: " + train.Nijkc(1, 2, 2, 2));
 
 		// then
 		if (train.getCriteria().equals(Criteria.MDL)) {

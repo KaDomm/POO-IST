@@ -1,192 +1,307 @@
 package entities;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import entities.enums.Criteria;
+import enums.Criteria;
 
+/**
+ * @author USER-Admin
+ *
+ */
 public class Train {
 
 	private List<Column> samples;
 	private Column columnC;
-	private Integer numberOfLines;
-	private Integer numberOfColumnsX;
 
-	Criteria criteria;
+	private Criteria criteria;
+
+	private int[][][][] nijkc;
+	private int[][][] nK;
+	private int[][][] nJ;
+	private int[] nC;
 
 	// constructors
-	protected Train(List<Column> samples, Column columnC, Integer numberOfLines, Integer numberOfColumnsX,
-			Criteria criteria) {
+	/**
+	 * @param samples
+	 * @param columnC
+	 * @param criteria
+	 * @param nijkc
+	 * @param nK
+	 * @param nJ
+	 * @param nC
+	 */
+	protected Train(List<Column> samples, Column columnC, Criteria criteria, int[][][][] nijkc, int[][][] nK,
+			int[][][] nJ, int[] nC) {
 		this.samples = samples;
 		this.columnC = columnC;
-		this.numberOfLines = numberOfLines;
-		this.numberOfColumnsX = numberOfColumnsX;
 		this.criteria = criteria;
+		this.nijkc = nijkc;
+		this.nK = nK;
+		this.nJ = nJ;
+		this.nC = nC;
 	}
 
+	/**
+	 * 
+	 */
 	public Train() {
-		super();
-	}
-
-	// Method to calculate Nijkc taking ijkc as parameters.
-	// to be tested and optimized (get(i) in for loop is bad and brings a large
-	// computational time)
-	public Integer Nijkc(int i, int j, int k, int c) {
-		Integer Nijkc = 0;
-		// case with no parents
-		Column columnI = samples.get(i - 1);
-		int kTh = k - 1;
-		int cTh = c - 1;
-		// protect outside
-		if (j > columnI.getR() - 1) {
-			return null;
-		}
-
-		if (i == 1) {
-			for (int n = 0; n < columnI.getArrayOfEntries().size(); n++) {
-				if (this.columnC.getArrayOfEntries().get(n) == cTh && columnI.getArrayOfEntries().get(n) == kTh) {
-					Nijkc++;
-				}
-			}
-		}
-		// case with parents
-		else {
-			Column columnParent = samples.get(i - 2);
-			// protect outside
-			if (j > columnParent.getR() - 1) {
-				return null;
-			}
-			int w = j - 1;
-			for (int n = 0; n < columnI.getArrayOfEntries().size(); n++) {
-				if (this.columnC.getArrayOfEntries().get(n) == cTh && columnI.getArrayOfEntries().get(n) == kTh
-						&& columnParent.getArrayOfEntries().get(n) == w) {
-					Nijkc++;
-				}
-			}
-		}
-		return Nijkc;
-	}
-
-	public Integer SumKNijc(int i, int j, int c) {
-		Integer kNijc = 0;
-
-		return kNijc;
-	}
-
-	public double alphaLL(int index) {
-		// index is i;
-		double alpha = 0;
-		Column ToCalculate = samples.get(index);
-		Column ParentToCalculate = samples.get(index - 1);
-		// 2D Arraylist containing the valuu of the Sum NJ depending on i,k. the first
-		// column is the value c=0; and the second column is value of c=1;
-		ArrayList<ArrayList<Integer>> NJ = new ArrayList<ArrayList<Integer>>();
-		// Nj here is the sum NJ with the kth value;
-		Integer Nj;
-		// 2D Arraylist containing the valuu of the Sum NK depending on i,j. the first
-		// column is the value c=0; and the second column is value of c=1;
-		ArrayList<ArrayList<Integer>> NK = new ArrayList<ArrayList<Integer>>();
-		// Nk here is the sum NK with the jth value;
-		Integer Nk;
-		// Nc with c = 0 in the first column, c = 1 in the second column
-		ArrayList<Integer> NC = new ArrayList<Integer>();
-		int Nc0 = 0;
-		int Nc1 = 0;
-		int N = ToCalculate.getR();
-		for (int c = 0; c < 1; c++) {
-			ArrayList<Integer> NJc = new ArrayList<Integer>();
-			ArrayList<Integer> NKc = new ArrayList<Integer>();
-			for (int k = 0; k < ToCalculate.getR(); k++) {
-				Nj = 0;
-				for (int j = 0; j < ParentToCalculate.getR(); j++) {
-					Nj = Nj + this.Nijkc(index, j, k, c);
-				}
-				NJc.add(Nj);
-			}
-			for (int j = 0; j < ParentToCalculate.getR(); j++) {
-				Nk = 0;
-				for (int k = 0; k < ToCalculate.getR(); k++) {
-					Nk = Nk + this.Nijkc(index, j, k, c);
-				}
-				NKc.add(Nk);
-			}
-			if (columnC.getArrayOfEntries().get(c) == 0) {
-				Nc0++;
-			} else {
-				Nc1++;
-			}
-			NJ.add(NJc);
-			NK.add(NKc);
-		}
-		NC.add(Nc0);
-		NC.add(Nc1);
-
-		for (int j = 0; j < ParentToCalculate.getR(); j++) {
-			for (int k = 0; k < ToCalculate.getR(); k++) {
-				for (int c = 0; c < 1; c++) {
-					double Nijkc = this.Nijkc(index, j, k, c);
-					alpha = alpha + Nijkc / N + this.log2(Nijkc * NC.get(c) / (NJ.get(c).get(k) * NK.get(k).get(j)));
-				}
-			}
-		}
-
-		return alpha;
-	}
-
-	public int log2(int n) {
-		if (n <= 0)
-			throw new IllegalArgumentException();
-		return 31 - Integer.numberOfLeadingZeros(n);
-	}
-
-	public int log2(double f) {
-		return (int) Math.floor(Math.log(f) / Math.log(2.0));
 	}
 
 	// getters and setter
+	/**
+	 * @return the samples
+	 */
 	public List<Column> getSamples() {
 		return samples;
 	}
 
+	/**
+	 * @param samples the samples to set
+	 */
 	public void setSamples(List<Column> samples) {
 		this.samples = samples;
 	}
 
+	/**
+	 * @return the columnC
+	 */
 	public Column getColumnC() {
 		return columnC;
 	}
 
+	/**
+	 * @param columnC the columnC to set
+	 */
 	public void setColumnC(Column columnC) {
 		this.columnC = columnC;
 	}
 
-	public Integer getNumberOfLines() {
-		return numberOfLines;
-	}
-
-	public void setNumberOfLines(Integer numberOfLines) {
-		this.numberOfLines = numberOfLines;
-	}
-
-	public Integer getNumberOfColumnsX() {
-		return numberOfColumnsX;
-	}
-
-	public void setNumberOfColumnsX(Integer numberOfColumnsX) {
-		this.numberOfColumnsX = numberOfColumnsX;
-	}
-
+	/**
+	 * @return the criteria
+	 */
 	public Criteria getCriteria() {
 		return criteria;
 	}
 
+	/**
+	 * @param criteria the criteria to set
+	 */
 	public void setCriteria(Criteria criteria) {
 		this.criteria = criteria;
+	}
+
+	/**
+	 * @return the nijkc
+	 */
+	public int[][][][] getNijkc() {
+		return nijkc;
+	}
+
+	/**
+	 * @param nIjKc2 the nijkc to set
+	 */
+	public void setNijkc(int[][][][] nIjKc2) {
+		this.nijkc = nIjKc2;
+	}
+
+	/**
+	 * @return the nK
+	 */
+	public int[][][] getnK() {
+		return nK;
+	}
+
+	/**
+	 * @param nK the nK to set
+	 */
+	public void setnK(int[][][] nK) {
+		this.nK = nK;
+	}
+
+	/**
+	 * @return the nJ
+	 */
+	public int[][][] getnJ() {
+		return nJ;
+	}
+
+	/**
+	 * @param nJ the nJ to set
+	 */
+	public void setnJ(int[][][] nJ) {
+		this.nJ = nJ;
+	}
+
+	/**
+	 * @return
+	 */
+	public int[] getnC() {
+		return nC;
+	}
+
+	/**
+	 * @param nC
+	 */
+	public void setnC(int[] nC) {
+		this.nC = nC;
+	}
+
+	public void getTrainData() {
+
+		this.computeAllNijkc();
+		this.SumKNijc();
+		this.SumJNikc();
+		this.getNc();
+	}
+
+	private void computeAllNijkc() {
+
+		// Instantiate matrix nIjKc
+		int[][][][] nIjKc = createMatrixNijkc();
+		// begin iteration of i (for(int i = 0... )
+		Iterator<Column> iter = this.samples.listIterator();
+		// first case only takes in consideration Parent column
+		// get first element from samples list
+		Column columnI = iter.next();
+		// parent doesn't exist first time
+		Column columnParent = null;
+		// first case there's no parent so j max it's 1
+		int i = 0, j = 0, k = 0, c = 0, nijkc = 0;
+		// compute N[1,1,*,*]
+		for (k = 0; k < columnI.getR(); k++)
+			for (c = 0; c < this.getColumnC().getR(); c++) {
+				Iterator<Integer> cEntrie = this.columnC.getArrayOfEntries().listIterator();
+				Iterator<Integer> iEntrie = columnI.getArrayOfEntries().listIterator();
+				// all columns have the same amount of entries
+				while (cEntrie.hasNext() && iEntrie.hasNext()) {
+					int ct = cEntrie.next(), xt = iEntrie.next();
+					if (ct == c && xt == k)
+						nijkc++;
+				}
+				nIjKc[i][j][k][c] = nijkc;
+				nijkc = 0;
+			}
+		// compute N[*,*,*,*]
+		while (iter.hasNext()) {
+			// parent is the previous column
+			columnParent = columnI;
+			columnI = iter.next();
+			i++;
+			for (j = 0; j < columnParent.getR(); j++)
+				for (k = 0; k < columnI.getR(); k++)
+					for (c = 0; c < columnC.getR(); c++) {
+						Iterator<Integer> cEntrie = columnC.getArrayOfEntries().listIterator();
+						Iterator<Integer> iEntrie = columnI.getArrayOfEntries().listIterator();
+						Iterator<Integer> pEntrie = columnParent.getArrayOfEntries().listIterator();
+						// all columns have the same amount of entries
+						while (cEntrie.hasNext() && iEntrie.hasNext() && pEntrie.hasNext()) {
+							int cE = cEntrie.next(), iE = iEntrie.next(), pE = pEntrie.next();
+							if (cE == c && iE == k && pE == j)
+								nijkc++;
+
+						}
+						nIjKc[i][j][k][c] = nijkc;
+						nijkc = 0;
+					}
+		}
+		this.setNijkc(nIjKc);
+	}
+
+	private void SumKNijc() {
+
+		int[][][] nIjc = this.createMatrixNk();
+		int sum = 0;
+
+		for (int i = 0; i < this.samples.size(); i++)
+			for (int j = 0; j < (i > 0 ? this.samples.get(i - 1).getR() : 1); j++)
+				for (int c = 0; c < this.columnC.getR(); c++) {
+					for (int k = 0; k < this.samples.get(i).getR(); k++)
+						sum += this.nijkc[i][j][k][c];
+					nIjc[i][j][c] = sum;
+					sum = 0;
+				}
+		this.setnK(nIjc);
+	}
+
+	private void SumJNikc() {
+
+		int[][][] nIkc = createMatrixNj();
+		int sum = 0;
+
+		for (int i = 0; i < this.samples.size(); i++)
+			for (int k = 0; k < this.samples.get(i).getR(); k++)
+				for (int c = 0; c < this.columnC.getR(); c++) {
+					for (int j = 0; j < (i > 0 ? this.samples.get(i - 1).getR() : 1); j++)
+						sum += this.nijkc[i][j][k][c];
+					nIkc[i][k][c] = sum;
+					sum = 0;
+				}
+		this.setnJ(nIkc);
+	}
+
+	private int[][][][] createMatrixNijkc() {
+
+		int maxI = this.samples.size();
+		int maxJ = 0;
+		int maxC = this.columnC.getR();
+
+		for (Column column : this.samples)
+			if (column.getR() > maxJ)
+				maxJ = column.getR();
+
+		int maxK = maxJ;
+
+		return new int[maxI][maxJ][maxK][maxC];
+	}
+
+	private int[][][] createMatrixNk() {
+
+		int maxI = this.samples.size();
+		int maxJ = 0;
+		int maxC = this.columnC.getR();
+
+		for (Column column : this.samples)
+			if (column.getR() > maxJ)
+				maxJ = column.getR();
+
+		return new int[maxI][maxJ][maxC];
+	}
+
+	private int[][][] createMatrixNj() {
+
+		int maxI = this.samples.size();
+		int maxK = 0;
+		int maxC = this.columnC.getR();
+
+		for (Column column : this.samples)
+			if (column.getR() > maxK)
+				maxK = column.getR();
+
+		return new int[maxI][maxK][maxC];
+	}
+
+	private void getNc() {
+
+		Column columnC = this.columnC;
+		int r = columnC.getR(), n = 0;
+		int[] nc = new int[r];
+
+		for (int c = 0; c < r; c++) {
+			Iterator<Integer> cEntrie = columnC.getArrayOfEntries().listIterator();
+			while (cEntrie.hasNext()) {
+				int cE = cEntrie.next();
+				if (cE == c)
+					n++;
+			}
+			nc[c] = n;
+			n = 0;
+		}
+		this.setnC(nc);
 	}
 
 	@Override
 	public String toString() {
 		return "\nsamples: \n" + samples + " \n\n columnC: " + columnC + " \n\n criteria: " + criteria;
 	}
-
 }

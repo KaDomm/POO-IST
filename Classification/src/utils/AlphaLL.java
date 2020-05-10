@@ -1,7 +1,10 @@
 package utils;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
+import entities.Alpha;
 import entities.Column;
 import entities.Train;
 import interfaces.CriteriaInterface;
@@ -9,33 +12,53 @@ import interfaces.CriteriaInterface;
 public class AlphaLL implements CriteriaInterface {
 
 	@Override
-	public void alpha(Train train) {
+	public List<Alpha> buildWeightedAlpha(Train train) {
 
-		Double alpha = 0.0;
-		// get all data from train
-		int[][][][] nijkc = train.getNijkc();
-		int[][][] nk = train.getnK();
-		int[][][] nj = train.getnJ();
-		int[] nc = train.getnC();
-		int n = train.getSamples().size(), i = 0;
-		// alpha is the weight between 2 columns so we have parent in the 1st iteration
-		Iterator<Column> iter = train.getSamples().listIterator();
-		// get first element from samples list
-		Column columnI = iter.next();
-		Column columnParent = null;
-		// compute N[1,1,*,*]
-		while (iter.hasNext()) {
-			i++;
-			columnParent = columnI;
-			columnI = iter.next();
+		List<Alpha> alphaList = new ArrayList<>();
+		// get Nc to use in alpha calculation
+		train.generateNc();
 
-			for (int j = 0; j < columnParent.getR(); j++)
-				for (int k = 0; k < columnI.getR(); k++)
-					for (int c = 0; c < train.getColumnC().getR(); c++) {
-						alpha = (double) ((nijkc[i][j][k][c] / n)
-								* Utils.log2((nijkc[i][j][k][c] * nc[c]) / (nj[i][k][c] * nk[i][j][c])));
-					}
+		int numOfSamples = train.getSamples().size();
+		// we need to check every node with all the other ( check every pair )
+		Iterator<Column> childNode = train.getSamples().listIterator();
+		// to track secondNode index
+		for (int i = 0; i < numOfSamples; i++) {
+			Column nodeAsChild = childNode.next();
+			Iterator<Column> parentNode = train.getSamples().listIterator();
+			for (int parentIndex = 0; parentIndex < numOfSamples; parentIndex++) {
+				Column nodeAsParent = parentNode.next();
+				Double alpha = 0.0;
+				// we don't want to check the same node, only different ones
+				if (i >= parentIndex)
+					continue;
+				for (int j = 0; j < nodeAsParent.getR(); j++)
+					for (int k = 0; k < nodeAsChild.getR(); k++)
+						for (int c = 0; c < train.getColumnC().getR(); c++)
+							alpha += this.calcAlpha(train, parentIndex, i, j, k, c);
+
+				Alpha nodeAlpha = new Alpha(nodeAsParent, parentIndex, nodeAsChild, i, alpha, false);
+				alphaList.add(nodeAlpha);
+				nodeAlpha = new Alpha(nodeAsChild, i, nodeAsParent, parentIndex, alpha, false);
+				alphaList.add(nodeAlpha);
+			}
 		}
 
+		return alphaList;
+
+	}
+
+	private Double calcAlpha(final Train train, final int parentIndex, final int i, final int j, final int k,
+			final int c) {
+
+		int n = train.getSamples().size();
+		double nIJKC = (double) train.nijkcTwoNodes(train, parentIndex, i, j, k, c);
+		int nC = train.getNC()[c];
+		int nJ = train.nJikcTwoNodes(train, parentIndex, i, k, c);
+		int nK = train.nKijcTwoNodes(train, parentIndex, i, j, c);
+
+		
+		CHECK ALL RESULTS HERE 
+		try System.out.println("and put stuff here");
+		return ((nIJKC / n) * Utils.log2((nIJKC * nC) / (nJ * nK)));
 	}
 }

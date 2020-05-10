@@ -76,7 +76,7 @@ public class Column {
 		for (Integer entrie : arrayOfEntries) {
 			entries = entries + " " + entrie;
 		}
-		return "\nname: " + name + "\n entries: \n" + entries + "\n" + this.r;
+		return "name: " + name + "  entries:  " + entries + "  r: " + r + "\n";
 	}
 
 }

@@ -136,14 +136,14 @@ public class Train {
 	/**
 	 * @return
 	 */
-	public int[] getnC() {
+	public int[] getNC() {
 		return nC;
 	}
 
 	/**
 	 * @param nC
 	 */
-	public void setnC(int[] nC) {
+	public void setNC(int[] nC) {
 		this.nC = nC;
 	}
 
@@ -152,7 +152,7 @@ public class Train {
 		this.computeAllNijkc();
 		this.SumKNijc();
 		this.SumJNikc();
-		this.getNc();
+		this.generateNc();
 	}
 
 	private void computeAllNijkc() {
@@ -240,7 +240,7 @@ public class Train {
 		this.setnJ(nIkc);
 	}
 
-	private int[][][][] createMatrixNijkc() {
+	public int[][][][] createMatrixNijkc() {
 
 		int maxI = this.samples.size();
 		int maxJ = 0;
@@ -255,7 +255,7 @@ public class Train {
 		return new int[maxI][maxJ][maxK][maxC];
 	}
 
-	private int[][][] createMatrixNk() {
+	public int[][][] createMatrixNk() {
 
 		int maxI = this.samples.size();
 		int maxJ = 0;
@@ -268,7 +268,7 @@ public class Train {
 		return new int[maxI][maxJ][maxC];
 	}
 
-	private int[][][] createMatrixNj() {
+	public int[][][] createMatrixNj() {
 
 		int maxI = this.samples.size();
 		int maxK = 0;
@@ -281,7 +281,7 @@ public class Train {
 		return new int[maxI][maxK][maxC];
 	}
 
-	private void getNc() {
+	public void generateNc() {
 
 		Column columnC = this.columnC;
 		int r = columnC.getR(), n = 0;
@@ -297,11 +297,69 @@ public class Train {
 			nc[c] = n;
 			n = 0;
 		}
-		this.setnC(nc);
+		this.setNC(nc);
 	}
 
 	@Override
 	public String toString() {
 		return "\nsamples: \n" + samples + " \n\n columnC: " + columnC + " \n\n criteria: " + criteria;
+	}
+
+	public Integer nijkcTwoNodes(final Train train, final int parentIndex, final int i, final int j, final int k,
+			final int c) {
+
+		Integer Nijkc = 0;
+
+		Iterator<Integer> iEntrie = this.samples.get(i).getArrayOfEntries().listIterator();
+		Iterator<Integer> pEntrie = this.samples.get(parentIndex).getArrayOfEntries().listIterator();
+		Iterator<Integer> cEntrie = this.columnC.getArrayOfEntries().listIterator();
+		// all columns have the same amount of entries
+		while (iEntrie.hasNext() && pEntrie.hasNext() && cEntrie.hasNext()) {
+			int iE = iEntrie.next(), pE = pEntrie.next(), cE = cEntrie.next();
+			if (cE == c && iE == k && pE == j)
+				Nijkc++;
+
+		}
+		return Nijkc;
+	}
+
+	public Integer nJikcTwoNodes(final Train train, final int parentIndex, final int i, final int k, final int c) {
+
+		Integer nJ = 0;
+		Column parent = train.getSamples().get(parentIndex);
+
+		for (int j = 0; j < parent.getR(); j++) {
+			Iterator<Integer> iEntrie = this.samples.get(i).getArrayOfEntries().listIterator();
+			Iterator<Integer> pEntrie = parent.getArrayOfEntries().listIterator();
+			Iterator<Integer> cEntrie = this.columnC.getArrayOfEntries().listIterator();
+			// all columns have the same amount of entries
+			while (iEntrie.hasNext() && pEntrie.hasNext() && cEntrie.hasNext()) {
+				int iE = iEntrie.next(), pE = pEntrie.next(), cE = cEntrie.next();
+				if (cE == c && iE == k && pE == j)
+					nJ++;
+
+			}
+		}
+		return nJ;
+	}
+
+	public int nKijcTwoNodes(Train train, final int parentIndex, final int i, final int j, final int c) {
+
+		Integer nK = 0;
+		Column child = train.getSamples().get(i);
+
+		for (int k = 0; k < child.getR(); k++) {
+			Iterator<Integer> iEntrie = child.getArrayOfEntries().listIterator();
+			Iterator<Integer> pEntrie = this.samples.get(parentIndex).getArrayOfEntries().listIterator();
+			Iterator<Integer> cEntrie = this.columnC.getArrayOfEntries().listIterator();
+			// all columns have the same amount of entries
+			while (iEntrie.hasNext() && pEntrie.hasNext() && cEntrie.hasNext()) {
+				int iE = iEntrie.next(), pE = pEntrie.next(), cE = cEntrie.next();
+				if (cE == c && iE == k && pE == j)
+					nK++;
+
+			}
+		}
+		return nK;
 	}
 }

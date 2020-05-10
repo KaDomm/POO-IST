@@ -1,11 +1,15 @@
 package aplication;
 
+import java.util.List;
+
+import entities.Alpha;
 import entities.Train;
 import enums.Criteria;
 import interfaces.CriteriaInterface;
 import utils.AlphaLL;
 import utils.AlphaMDL;
 import utils.FileControl;
+import utils.Prim;
 
 public class Program {
 
@@ -18,18 +22,29 @@ public class Program {
 		}
 
 		// Instantiate object train
-		Train train = FileControl.BuildTrainFromFile(args[0], args[2]);
+		Train train = FileControl.BuildTrainFromFile(args[0]);
 		if (train == null)
 			return;
-
-		train.getTrainData();
-		CriteriaInterface alpha = null;
-
+		// if wrong criteria string throws exception and exit
+		try {
+			train.setCriteria(Criteria.valueOf(args[2]));
+		} catch (IllegalArgumentException e) {
+			System.out.println("Ivalid criteria argument: " + e.getMessage());
+			return;
+		}
 		// Select type of criteria
-		alpha = train.getCriteria().equals(Criteria.MDL) ? new AlphaMDL()
+		CriteriaInterface alpha = train.getCriteria().equals(Criteria.MDL) ? new AlphaMDL()
 				: train.getCriteria().equals(Criteria.LL) ? new AlphaLL() : null;
 
-		alpha.alpha(train);
+		List<Alpha> weightedEdges = alpha.buildWeightedAlpha(train);
+
+		System.out.println(weightedEdges);
+
+		Prim.generateTree(train.getSamples(), weightedEdges);
+		// Instantiate object train
+		Train test = FileControl.BuildTrainFromFile(args[1]);
+
+		test.getTrainData();
 
 		// PRINT Nijkc
 //		for (int i = 0; i < train.getSamples().size(); i++) {

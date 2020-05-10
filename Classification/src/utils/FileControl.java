@@ -8,11 +8,10 @@ import java.util.Iterator;
 
 import entities.Column;
 import entities.Train;
-import enums.Criteria;
 
 public class FileControl {
 
-	public static Train BuildTrainFromFile(String File, String criteria) {
+	public static Train BuildTrainFromFile(String File) {
 
 		Train train = new Train();
 
@@ -72,13 +71,6 @@ public class FileControl {
 			return null;
 		}
 
-		// if wrong criteria string throws exception and exit
-		try {
-			train.setCriteria(Criteria.valueOf(criteria));
-		} catch (IllegalArgumentException e) {
-			System.out.println("Ivalid criteria argument: " + e.getMessage());
-			return null;
-		}
 		return train;
 	}
 

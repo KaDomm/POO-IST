@@ -36,7 +36,12 @@ public class AlphaMDL implements CriteriaInterface {
 					for (int k = 0; k < nodeAsChild.getR(); k++)
 						for (int c = 0; c < train.getColumnC().getR(); c++)
 							alpha += this.calcAlpha(train, parentIndex, i, j, k, c);
-
+				int n = train.getColumnC().getArrayOfEntries().size();
+				double qi = (double) train.getSamples().get(parentIndex).getR();
+				double ri = (double) train.getSamples().get(i).getR();
+				double s = (double) train.getColumnC().getR();
+				alpha = alpha - (((s * (ri - 1.0) * (qi - 1.0)) / 2.0) * Math.log(n));
+				
 				Alpha nodeAlpha = new Alpha(nodeAsChild, i, nodeAsParent, parentIndex, alpha, false);
 				alphaList.add(nodeAlpha);
 			}
@@ -48,7 +53,7 @@ public class AlphaMDL implements CriteriaInterface {
 
 	private Double calcAlpha(final Train train, final int parentIndex, final int i, final int j, final int k,
 			final int c) {
-
+		/*
 		double n = (double) train.getColumnC().getArrayOfEntries().size();
 		double nIJKC = (double) train.nijkcTwoNodes(parentIndex, i, j, k, c);
 		// just need to get nC because already run in buildWeightedAlpha()
@@ -57,12 +62,30 @@ public class AlphaMDL implements CriteriaInterface {
 		double nK = (double) train.nKijcTwoNodes(parentIndex, i, j, c);
 
 		double alphaLL = nJ == 0 || nK == 0 || nIJKC == 0 ? 0 : ((nIJKC / n) * Utils.log2((nIJKC * nC) / (nJ * nK)));
-
-		double qi = (double) train.getSamples().get(parentIndex).getR();
+	*/
+		
+		int n = train.getColumnC().getArrayOfEntries().size();
+		System.out.println(n);
+		double nIJKC = (double) train.nijkcTwoNodes(parentIndex, i, j, k, c);
+		if (nIJKC == 0)
+			return 0.0;
+		// just need to get nC because already run in buildWeightedAlpha()
+		int nC = train.getNC()[c];
+		int nJ = train.nJikcTwoNodes(parentIndex, i, k, c);
+		if (nJ == 0)
+			return 0.0;
+		int nK = train.nKijcTwoNodes(parentIndex, i, j, c);
+		if (nK == 0)
+			return 0.0;
+		/*double qi = (double) train.getSamples().get(parentIndex).getR();
 		double ri = (double) train.getSamples().get(i).getR();
 		double s = (double) train.getColumnC().getR();
+		//System.out.println("qi = "+qi+" et ri = "+ri+ " et s = "+s);
+		 */
+		 
+		double alphaLL = ((nIJKC / n) * Utils.log2((nIJKC * nC) / (nJ * nK)));
 
-		return (double) alphaLL - (((s * (ri - 1.0) * (qi - 1.0)) / 2.0) * Math.log(n));
+		return (double) alphaLL ;
 	}
 
 }

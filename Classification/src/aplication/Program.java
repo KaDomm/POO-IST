@@ -44,7 +44,7 @@ public class Program {
 		// Instantiate object test
 		Train test = FileControl.BuildTrainFromFile(args[1]);
 
-		//test.getTrainData();
+		test.getTrainData();
 
 		// PRINT Nijkc
 //		for (int i = 0; i < train.getSamples().size(); i++) {

@@ -147,15 +147,15 @@ public class Train {
 		this.nC = nC;
 	}
 
-	public void getTrainData() {
+	public void getTrainData(List<Alpha> parentList) {
 
-		this.computeAllNijkc();
+		this.computeAllNijkc(parentList);
 		this.SumKNijc();
 		this.SumJNikc();
 		this.generateNc();
 	}
 
-	private void computeAllNijkc() {
+	private void computeAllNijkc(List<Alpha> parentList) {
 
 		// Instantiate matrix nIjKc
 		int[][][][] nIjKc = createMatrixNijkc();
@@ -360,5 +360,20 @@ public class Train {
 			}
 		}
 		return nK;
+	}
+
+	public void printFinalResult(List<Alpha> parentList, long firstTime, long lastTime) {
+
+		System.out.println("Classifier: \t\t" + this.samples.get(parentList.get(0).getChildIndex()).getName());
+		for (int i = 1; i < parentList.size(); i++) {
+			int childIndex = parentList.get(i).getChildIndex();
+			int parentIndex = parentList.get(i).getParentIndex();
+			System.out.println("\t\t\t" + this.samples.get(childIndex).getName() + " : "
+					+ this.samples.get(parentIndex).getName());
+		}
+		System.out.println("Time to build: \t\t" + firstTime / 1000000.0 + "ms");
+
+		System.out.println("Time to build: \t\t" + lastTime / 1000000.0 + "ms");
+
 	}
 }

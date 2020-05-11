@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import entities.Alpha;
@@ -80,30 +81,18 @@ public class Prim {
 		return parent;
 	}
 
-	public static void generateTree(List<Column> samples, List<Alpha> listAlphas) {
+	public static List<Alpha> generateTree(List<Column> samples, List<Alpha> listAlphas) {
 
 		double[][] graph = grafFromAlphas(samples, listAlphas);
 
-		int[] mst = primMST(graph);
-
-		double max = Double.MAX_VALUE * (-1);
-		int rootIndex = 0;
-		for (int i = 1; i < mst.length; i++) {
-			if (graph[mst[i]][i] > max) {
-				max = graph[mst[i]][i];
-				rootIndex = i;
-			}
+		// this will save information about the nodes that belong to our tree
+		int[] parents = primMST(graph);
+		listAlphas = new ArrayList<>();
+		for (int i = 0; i < parents.length; i++) {
+			Alpha alpha = new Alpha(i, parents[i]);
+			listAlphas.add(alpha);
 		}
-		System.out.println(rootIndex);
-//		List<String> orderedNames = new ArrayList<>();
-//		orderedNames.add(samples.get(rootIndex).getName());
-//		int parentIndex = rootIndex;
-//		for (int i = 1; i < mst.length - 1; i++) {
-//			mst[i] = mst[i];
-//			samples.get(mst[i]);
-//		}
-
-		printMST(mst, graph);
+		return listAlphas;
 	}
 
 	protected static double[][] grafFromAlphas(List<Column> samples, List<Alpha> listAlphas) {

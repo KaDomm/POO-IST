@@ -2,17 +2,11 @@ package entities;
 
 public class Alpha {
 
-	private Column parent;
-
 	private int parentIndex;
-
-	private Column child;
 
 	private int childIndex;
 
 	private double alpha;
-
-	private Boolean belongTree;
 
 	/**
 	 * @param parent
@@ -22,42 +16,15 @@ public class Alpha {
 	 * @param alpha
 	 * @param belongTree
 	 */
-	public Alpha(Column parent, int parentIndex, Column child, int childIndex, double alpha, Boolean belongTree) {
-		super();
-		this.parent = parent;
+	public Alpha(int parentIndex, int childIndex, double alpha) {
 		this.parentIndex = parentIndex;
-		this.child = child;
 		this.childIndex = childIndex;
 		this.alpha = alpha;
-		this.belongTree = belongTree;
 	}
 
-	/**
-	 * @return the parent
-	 */
-	public Column getParent() {
-		return parent;
-	}
-
-	/**
-	 * @param parent the parent to set
-	 */
-	public void setParent(Column parent) {
-		this.parent = parent;
-	}
-
-	/**
-	 * @return the child
-	 */
-	public Column getChild() {
-		return child;
-	}
-
-	/**
-	 * @param child the child to set
-	 */
-	public void setChild(Column child) {
-		this.child = child;
+	public Alpha(int childIndex, int parentIndx) {
+		this.parentIndex = parentIndx;
+		this.childIndex = childIndex;
 	}
 
 	/**
@@ -72,20 +39,6 @@ public class Alpha {
 	 */
 	public void setAlpha(double alpha) {
 		this.alpha = alpha;
-	}
-
-	/**
-	 * @return the belongTree
-	 */
-	public Boolean getBelongTree() {
-		return belongTree;
-	}
-
-	/**
-	 * @param belongTree the belongTree to set
-	 */
-	public void setBelongTree(Boolean belongTree) {
-		this.belongTree = belongTree;
 	}
 
 	/**

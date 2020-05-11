@@ -20,7 +20,6 @@ public class Program {
 			System.out.println("Invalid number of input arguments");
 			return;
 		}
-
 		// Instantiate object train
 		Train train = FileControl.BuildTrainFromFile(args[0]);
 		if (train == null)
@@ -36,15 +35,24 @@ public class Program {
 		CriteriaInterface alpha = train.getCriteria().equals(Criteria.MDL) ? new AlphaMDL()
 				: train.getCriteria().equals(Criteria.LL) ? new AlphaLL() : null;
 
+		Long timeBeforeTree = System.nanoTime();
+
 		List<Alpha> weightedEdges = alpha.buildWeightedAlpha(train);
 
-//		System.out.println(weightedEdges);
+		List<Alpha> parentList = Prim.generateTree(train.getSamples(), weightedEdges);
 
-		Prim.generateTree(train.getSamples(), weightedEdges);
+		Long timeAfterTree = System.nanoTime();
+
 		// Instantiate object test
 		Train test = FileControl.BuildTrainFromFile(args[1]);
 
-		test.getTrainData();
+		Long timeBeforeTest = System.nanoTime();
+
+		test.getTrainData(parentList);
+
+		Long timeAfterTest = System.nanoTime();
+
+		test.printFinalResult(parentList, timeAfterTree - timeBeforeTree, timeAfterTest - timeBeforeTest);
 
 		// PRINT Nijkc
 //		for (int i = 0; i < train.getSamples().size(); i++) {

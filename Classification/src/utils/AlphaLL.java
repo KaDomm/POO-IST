@@ -37,7 +37,7 @@ public class AlphaLL implements CriteriaInterface {
 						for (int c = 0; c < train.getColumnC().getR(); c++)
 							alpha += this.calcAlpha(train, parentIndex, i, j, k, c);
 
-				Alpha nodeAlpha = new Alpha(nodeAsChild, i, nodeAsParent, parentIndex, alpha, false);
+				Alpha nodeAlpha = new Alpha(parentIndex, i, alpha);
 				alphaList.add(nodeAlpha);
 			}
 		}

@@ -118,8 +118,7 @@ public class Alpha {
 
 	@Override
 	public String toString() {
-		return "-\n\n parent= " + parent + ", parentIndex=" + parentIndex + "\n child= " + child + ", childIndex="
-				+ childIndex + ", alpha=" + alpha + "\n\n";
+		return "[" + parentIndex + "][" + childIndex + "] = " + alpha + "\n";
 	}
 
 }

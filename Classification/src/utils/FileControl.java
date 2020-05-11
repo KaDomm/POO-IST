@@ -48,13 +48,11 @@ public class FileControl {
 				String[] entries = line.split(",");
 
 				Iterator<Column> iter = train.getSamples().listIterator();
-				while (iter.hasNext()) {
-					for (int i = 0; i < entries.length - 1; i++) {
-						Column column = iter.next();
-						column.getArrayOfEntries().add(Integer.valueOf(entries[i]));
-						if (Integer.valueOf(entries[i]) > column.getR() - 1) {
-							column.setR(Integer.valueOf(entries[i]) + 1);
-						}
+				for (int i = 0; i < entries.length - 1; i++) {
+					Column column = iter.next();
+					column.getArrayOfEntries().add(Integer.valueOf(entries[i]));
+					if (Integer.valueOf(entries[i]) > column.getR() - 1) {
+						column.setR(Integer.valueOf(entries[i]) + 1);
 					}
 				}
 

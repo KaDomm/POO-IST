@@ -305,8 +305,7 @@ public class Train {
 		return "\nsamples: \n" + samples + " \n\n columnC: " + columnC + " \n\n criteria: " + criteria;
 	}
 
-	public Integer nijkcTwoNodes(final Train train, final int parentIndex, final int i, final int j, final int k,
-			final int c) {
+	public Integer nijkcTwoNodes(final int parentIndex, final int i, final int j, final int k, final int c) {
 
 		Integer Nijkc = 0;
 
@@ -323,10 +322,10 @@ public class Train {
 		return Nijkc;
 	}
 
-	public Integer nJikcTwoNodes(final Train train, final int parentIndex, final int i, final int k, final int c) {
+	public Integer nJikcTwoNodes(final int parentIndex, final int i, final int k, final int c) {
 
 		Integer nJ = 0;
-		Column parent = train.getSamples().get(parentIndex);
+		Column parent = samples.get(parentIndex);
 
 		for (int j = 0; j < parent.getR(); j++) {
 			Iterator<Integer> iEntrie = this.samples.get(i).getArrayOfEntries().listIterator();
@@ -343,10 +342,10 @@ public class Train {
 		return nJ;
 	}
 
-	public int nKijcTwoNodes(Train train, final int parentIndex, final int i, final int j, final int c) {
+	public int nKijcTwoNodes(final int parentIndex, final int i, final int j, final int c) {
 
 		Integer nK = 0;
-		Column child = train.getSamples().get(i);
+		Column child = samples.get(i);
 
 		for (int k = 0; k < child.getR(); k++) {
 			Iterator<Integer> iEntrie = child.getArrayOfEntries().listIterator();
@@ -355,7 +354,7 @@ public class Train {
 			// all columns have the same amount of entries
 			while (iEntrie.hasNext() && pEntrie.hasNext() && cEntrie.hasNext()) {
 				int iE = iEntrie.next(), pE = pEntrie.next(), cE = cEntrie.next();
-				if (cE == c && iE == k && pE == j)
+				if (iE == k && pE == j && cE == c)
 					nK++;
 
 			}

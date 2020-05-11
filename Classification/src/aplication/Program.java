@@ -38,10 +38,10 @@ public class Program {
 
 		List<Alpha> weightedEdges = alpha.buildWeightedAlpha(train);
 
-		System.out.println(weightedEdges);
+//		System.out.println(weightedEdges);
 
 		Prim.generateTree(train.getSamples(), weightedEdges);
-		// Instantiate object train
+		// Instantiate object test
 		Train test = FileControl.BuildTrainFromFile(args[1]);
 
 		test.getTrainData();

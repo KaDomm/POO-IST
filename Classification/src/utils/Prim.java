@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entities.Alpha;
-import entities.Column;
 
 public class Prim {
 
 	// A utility function to find the vertex with minimum key
 	// value, from the set of vertices not yet included in MST
 	static int maxKey(double key[], Boolean mstSet[], int size) {
-		// Initialize min value
+		// Initialize max value
 		double max = Double.MAX_VALUE * (-1);
 		int max_index = -1;
 
@@ -81,13 +80,15 @@ public class Prim {
 		return parent;
 	}
 
-	public static List<Alpha> generateTree(List<Column> samples, List<Alpha> listAlphas) {
+	public static List<Alpha> generateTree(int size, List<Alpha> listAlphas) {
 
-		double[][] graph = grafFromAlphas(samples, listAlphas);
+		double[][] graph = grafFromAlphas(size, listAlphas);
 
 		// this will save information about the nodes that belong to our tree
 		int[] parents = primMST(graph);
+
 		listAlphas = new ArrayList<>();
+
 		for (int i = 0; i < parents.length; i++) {
 			Alpha alpha = new Alpha(i, parents[i]);
 			listAlphas.add(alpha);
@@ -95,9 +96,9 @@ public class Prim {
 		return listAlphas;
 	}
 
-	protected static double[][] grafFromAlphas(List<Column> samples, List<Alpha> listAlphas) {
+	protected static double[][] grafFromAlphas(int size, List<Alpha> listAlphas) {
 
-		double[][] graph = new double[samples.size()][samples.size()];
+		double[][] graph = new double[size][size];
 
 		for (Alpha alpha : listAlphas) {
 			graph[alpha.getChildIndex()][alpha.getParentIndex()] = alpha.getAlpha();

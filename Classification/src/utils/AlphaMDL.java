@@ -54,16 +54,6 @@ public class AlphaMDL implements CriteriaInterface {
 
 	private Double calcAlpha(final Train train, final int parentIndex, final int i, final int j, final int k,
 			final int c) {
-		/*
-		 * double n = (double) train.getColumnC().getArrayOfEntries().size(); double
-		 * nIJKC = (double) train.nijkcTwoNodes(parentIndex, i, j, k, c); // just need
-		 * to get nC because already run in buildWeightedAlpha() double nC = (double)
-		 * train.getNC()[c]; double nJ = (double) train.nJikcTwoNodes(parentIndex, i, k,
-		 * c); double nK = (double) train.nKijcTwoNodes(parentIndex, i, j, c);
-		 * 
-		 * double alphaLL = nJ == 0 || nK == 0 || nIJKC == 0 ? 0 : ((nIJKC / n) *
-		 * Utils.log2((nIJKC * nC) / (nJ * nK)));
-		 */
 
 		int n = train.getColumnC().getArrayOfEntries().size();
 		double nIJKC = (double) train.nijkcTwoNodes(parentIndex, i, j, k, c);
@@ -77,12 +67,6 @@ public class AlphaMDL implements CriteriaInterface {
 		int nK = train.nKijcTwoNodes(parentIndex, i, j, c);
 		if (nK == 0)
 			return 0.0;
-		/*
-		 * double qi = (double) train.getSamples().get(parentIndex).getR(); double ri =
-		 * (double) train.getSamples().get(i).getR(); double s = (double)
-		 * train.getColumnC().getR(); //System.out.println("qi = "+qi+" et ri = "+ri+
-		 * " et s = "+s);
-		 */
 
 		return ((nIJKC / n) * Utils.log2((nIJKC * nC) / (nJ * nK)));
 	}

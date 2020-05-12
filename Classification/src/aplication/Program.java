@@ -40,7 +40,7 @@ public class Program {
 
 		List<Alpha> weightedEdges = alpha.buildWeightedAlpha(train);
 
-		List<Alpha> parentList = Prim.generateTree(train.getSamples(), weightedEdges);
+		List<Alpha> parentList = Prim.generateTree(train.getSamples().size(), weightedEdges);
 
 		Long timeAfterTree = System.nanoTime();
 

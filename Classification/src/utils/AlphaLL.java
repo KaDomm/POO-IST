@@ -54,7 +54,7 @@ public class AlphaLL implements CriteriaInterface {
 		if (nIJKC == 0)
 			return 0.0;
 		// just need to get nC because already run in buildWeightedAlpha()
-		int nC = train.getNC()[c];
+		int nC = train.getnC()[c];
 		int nJ = train.nJikcTwoNodes(parentIndex, i, k, c);
 		if (nJ == 0)
 			return 0.0;

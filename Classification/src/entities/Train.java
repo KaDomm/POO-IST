@@ -13,33 +13,20 @@ public class Train {
 
 	private List<Column> samples;
 	private Column columnC;
+	private int[] nC;
 
 	private Criteria criteria;
-
-	private int[][][][] nijkc;
-	private int[][][] nK;
-	private int[][][] nJ;
-	private int[] nC;
 
 	// constructors
 	/**
 	 * @param samples
 	 * @param columnC
 	 * @param criteria
-	 * @param nijkc
-	 * @param nK
-	 * @param nJ
-	 * @param nC
 	 */
-	protected Train(List<Column> samples, Column columnC, Criteria criteria, int[][][][] nijkc, int[][][] nK,
-			int[][][] nJ, int[] nC) {
+	protected Train(List<Column> samples, Column columnC, Criteria criteria) {
 		this.samples = samples;
 		this.columnC = columnC;
 		this.criteria = criteria;
-		this.nijkc = nijkc;
-		this.nK = nK;
-		this.nJ = nJ;
-		this.nC = nC;
 	}
 
 	/**
@@ -92,198 +79,27 @@ public class Train {
 	}
 
 	/**
-	 * @return the nijkc
+	 * @return the nC
 	 */
-	public int[][][][] getNijkc() {
-		return nijkc;
-	}
-
-	/**
-	 * @param nIjKc2 the nijkc to set
-	 */
-	public void setNijkc(int[][][][] nIjKc2) {
-		this.nijkc = nIjKc2;
-	}
-
-	/**
-	 * @return the nK
-	 */
-	public int[][][] getnK() {
-		return nK;
-	}
-
-	/**
-	 * @param nK the nK to set
-	 */
-	public void setnK(int[][][] nK) {
-		this.nK = nK;
-	}
-
-	/**
-	 * @return the nJ
-	 */
-	public int[][][] getnJ() {
-		return nJ;
-	}
-
-	/**
-	 * @param nJ the nJ to set
-	 */
-	public void setnJ(int[][][] nJ) {
-		this.nJ = nJ;
-	}
-
-	/**
-	 * @return
-	 */
-	public int[] getNC() {
+	public int[] getnC() {
 		return nC;
 	}
 
 	/**
-	 * @param nC
+	 * @param nC the nC to set
 	 */
-	public void setNC(int[] nC) {
+	public void setnC(int[] nC) {
 		this.nC = nC;
 	}
 
-	public void getTrainData(List<Alpha> parentList) {
-
-		this.computeAllNijkc(parentList);
-		this.SumKNijc();
-		this.SumJNikc();
-		this.generateNc();
-	}
-
-	private void computeAllNijkc(List<Alpha> parentList) {
-
-		// Instantiate matrix nIjKc
-		int[][][][] nIjKc = createMatrixNijkc();
-		// begin iteration of i (for(int i = 0... )
-		Iterator<Column> iter = this.samples.listIterator();
-		// first case only takes in consideration Parent column
-		// get first element from samples list
-		Column columnI = iter.next();
-		// parent doesn't exist first time
-		Column columnParent = null;
-		// first case there's no parent so j max it's 1
-		int i = 0, j = 0, k = 0, c = 0, nijkc = 0;
-		// compute N[1,1,*,*]
-		for (k = 0; k < columnI.getR(); k++)
-			for (c = 0; c < this.getColumnC().getR(); c++) {
-				Iterator<Integer> cEntrie = this.columnC.getArrayOfEntries().listIterator();
-				Iterator<Integer> iEntrie = columnI.getArrayOfEntries().listIterator();
-				// all columns have the same amount of entries
-				while (cEntrie.hasNext() && iEntrie.hasNext()) {
-					int ct = cEntrie.next(), xt = iEntrie.next();
-					if (ct == c && xt == k)
-						nijkc++;
-				}
-				nIjKc[i][j][k][c] = nijkc;
-				nijkc = 0;
-			}
-		// compute N[*,*,*,*]
-		while (iter.hasNext()) {
-			// parent is the previous column
-			columnParent = columnI;
-			columnI = iter.next();
-			i++;
-			for (j = 0; j < columnParent.getR(); j++)
-				for (k = 0; k < columnI.getR(); k++)
-					for (c = 0; c < columnC.getR(); c++) {
-						Iterator<Integer> cEntrie = columnC.getArrayOfEntries().listIterator();
-						Iterator<Integer> iEntrie = columnI.getArrayOfEntries().listIterator();
-						Iterator<Integer> pEntrie = columnParent.getArrayOfEntries().listIterator();
-						// all columns have the same amount of entries
-						while (cEntrie.hasNext() && iEntrie.hasNext() && pEntrie.hasNext()) {
-							int cE = cEntrie.next(), iE = iEntrie.next(), pE = pEntrie.next();
-							if (cE == c && iE == k && pE == j)
-								nijkc++;
-
-						}
-						nIjKc[i][j][k][c] = nijkc;
-						nijkc = 0;
-					}
-		}
-		this.setNijkc(nIjKc);
-	}
-
-	private void SumKNijc() {
-
-		int[][][] nIjc = this.createMatrixNk();
-		int sum = 0;
-
-		for (int i = 0; i < this.samples.size(); i++)
-			for (int j = 0; j < (i > 0 ? this.samples.get(i - 1).getR() : 1); j++)
-				for (int c = 0; c < this.columnC.getR(); c++) {
-					for (int k = 0; k < this.samples.get(i).getR(); k++)
-						sum += this.nijkc[i][j][k][c];
-					nIjc[i][j][c] = sum;
-					sum = 0;
-				}
-		this.setnK(nIjc);
-	}
-
-	private void SumJNikc() {
-
-		int[][][] nIkc = createMatrixNj();
-		int sum = 0;
-
-		for (int i = 0; i < this.samples.size(); i++)
-			for (int k = 0; k < this.samples.get(i).getR(); k++)
-				for (int c = 0; c < this.columnC.getR(); c++) {
-					for (int j = 0; j < (i > 0 ? this.samples.get(i - 1).getR() : 1); j++)
-						sum += this.nijkc[i][j][k][c];
-					nIkc[i][k][c] = sum;
-					sum = 0;
-				}
-		this.setnJ(nIkc);
-	}
-
-	public int[][][][] createMatrixNijkc() {
-
-		int maxI = this.samples.size();
-		int maxJ = 0;
-		int maxC = this.columnC.getR();
-
-		for (Column column : this.samples)
-			if (column.getR() > maxJ)
-				maxJ = column.getR();
-
-		int maxK = maxJ;
-
-		return new int[maxI][maxJ][maxK][maxC];
-	}
-
-	public int[][][] createMatrixNk() {
-
-		int maxI = this.samples.size();
-		int maxJ = 0;
-		int maxC = this.columnC.getR();
-
-		for (Column column : this.samples)
-			if (column.getR() > maxJ)
-				maxJ = column.getR();
-
-		return new int[maxI][maxJ][maxC];
-	}
-
-	public int[][][] createMatrixNj() {
-
-		int maxI = this.samples.size();
-		int maxK = 0;
-		int maxC = this.columnC.getR();
-
-		for (Column column : this.samples)
-			if (column.getR() > maxK)
-				maxK = column.getR();
-
-		return new int[maxI][maxK][maxC];
+	@Override
+	public String toString() {
+		return "\nsamples: \n" + samples + " \n\n columnC: " + columnC + " \n\n criteria: " + criteria;
 	}
 
 	public void generateNc() {
 
-		Column columnC = this.columnC;
+		Column columnC = this.getColumnC();
 		int r = columnC.getR(), n = 0;
 		int[] nc = new int[r];
 
@@ -297,12 +113,7 @@ public class Train {
 			nc[c] = n;
 			n = 0;
 		}
-		this.setNC(nc);
-	}
-
-	@Override
-	public String toString() {
-		return "\nsamples: \n" + samples + " \n\n columnC: " + columnC + " \n\n criteria: " + criteria;
+		this.setnC(nc);
 	}
 
 	public Integer nijkcTwoNodes(final int parentIndex, final int i, final int j, final int k, final int c) {
@@ -364,7 +175,7 @@ public class Train {
 
 	public void printFinalResult(List<Alpha> parentList, long firstTime, long lastTime) {
 
-		System.out.println("Classifier: \t\t" + this.samples.get(parentList.get(0).getChildIndex()).getName());
+		System.out.println("Classifier: \t\t" + this.samples.get(parentList.get(0).getChildIndex()).getName() + " :");
 		for (int i = 1; i < parentList.size(); i++) {
 			int childIndex = parentList.get(i).getChildIndex();
 			int parentIndex = parentList.get(i).getParentIndex();

@@ -5,10 +5,20 @@ import java.util.List;
 
 import entities.Alpha;
 
+/**
+ * @author USER-Admin
+ *
+ */
 public class Prim {
 
-	// A utility function to find the vertex with minimum key
+	// A utility function to find the vertex with maximum key
 	// value, from the set of vertices not yet included in MST
+	/**
+	 * @param key
+	 * @param mstSet
+	 * @param size
+	 * @return
+	 */
 	static int maxKey(double key[], Boolean mstSet[], int size) {
 		// Initialize max value
 		double max = Double.MAX_VALUE * (-1);
@@ -23,16 +33,10 @@ public class Prim {
 		return max_index;
 	}
 
-	// A utility function to print the constructed MST stored in
-	// parent[]
-	public static void printMST(int parent[], double[][] graph) {
-		System.out.println("Edge \tWeight");
-		for (int i = 1; i < parent.length; i++)
-			System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
-	}
-
-	// Function to construct and print MST for a graph represented
-	// using adjacency matrix representation
+	/**
+	 * @param graph
+	 * @return
+	 */
 	static int[] primMST(double[][] graph) {
 		// Array to store constructed MST
 		int parent[] = new int[graph.length];
@@ -43,7 +47,7 @@ public class Prim {
 		// To represent set of vertices not yet included in MST
 		Boolean mstSet[] = new Boolean[graph.length];
 
-		// Initialize all keys as INFINITE
+		// Initialize all keys as -INFINITE
 		for (int i = 0; i < graph.length; i++) {
 			key[i] = Double.MAX_VALUE * (-1);
 			mstSet[i] = false;
@@ -56,7 +60,7 @@ public class Prim {
 
 		// The MST will have V vertices
 		for (int count = 0; count < graph.length - 1; count++) {
-			// Pick thd minimum key vertex from the set of vertices
+			// Pick thd maximum key vertex from the set of vertices
 			// not yet included in MST
 			int u = maxKey(key, mstSet, graph.length);
 
@@ -70,7 +74,7 @@ public class Prim {
 
 				// graph[u][v] is non zero only for adjacent vertices of m
 				// mstSet[v] is false for vertices not yet included in MST
-				// Update the key only if graph[u][v] is smaller than key[v]
+				// Update the key only if graph[u][v] is greater than key[v]
 				if (graph[u][v] != 0 && mstSet[v] == false && graph[u][v] >= key[v]) {
 					parent[v] = u;
 					key[v] = graph[u][v];
@@ -80,6 +84,11 @@ public class Prim {
 		return parent;
 	}
 
+	/**
+	 * @param size
+	 * @param listAlphas
+	 * @return
+	 */
 	public static List<Alpha> generateTree(int size, List<Alpha> listAlphas) {
 
 		double[][] graph = grafFromAlphas(size, listAlphas);
@@ -96,6 +105,11 @@ public class Prim {
 		return listAlphas;
 	}
 
+	/**
+	 * @param size
+	 * @param listAlphas
+	 * @return
+	 */
 	protected static double[][] grafFromAlphas(int size, List<Alpha> listAlphas) {
 
 		double[][] graph = new double[size][size];

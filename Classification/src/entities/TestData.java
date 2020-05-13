@@ -1,10 +1,16 @@
 package entities;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 import enums.Criteria;
 
+/**
+ * @author USER-Admin
+ *
+ */
 public class TestData extends Train {
 
 	private int[][][][] nijkc;
@@ -95,6 +101,10 @@ public class TestData extends Train {
 		this.theta = theta2;
 	}
 
+	/**
+	 * @param parentList
+	 * @return
+	 */
 	public List<Integer> generateListOfTheta(List<Alpha> parentList) {
 
 		this.computeAllNijkc(parentList);
@@ -102,9 +112,78 @@ public class TestData extends Train {
 		this.SumJNikc();
 		this.generateNc();
 		this.computeTheta(parentList);
-		return null;
+		return this.estimation(parentList);
 	}
 
+	/**
+	 * @param parentList
+	 */
+	private List<Integer> estimation(List<Alpha> parentList) {
+
+		List<Integer> finalEstimationColumnC = new ArrayList<>();
+		// number of lines in the file
+		int numberOfEntries = this.getSamples().get(0).getArrayOfEntries().size();
+		// number of possible values for c
+		int s = this.getColumnC().getR();
+		// we go through all lines from file
+		for (int line = 0; line < numberOfEntries; line++) {
+			// for each line we need to multiply thetaIJKC from each column
+			// we need to have all tethas[i][j][k][c] multiply but c value changes
+			// each possible value of [c] have is own multiplication(check equation slack)
+			double[] thetaCs = new double[this.getColumnC().getR()];
+			Arrays.fill(thetaCs, 1.0);
+			// for each line we need to check the value of child and the parent
+			for (Alpha alpha : parentList) {
+				// from parentList we always know who is the parent
+				int i = alpha.getChildIndex();
+				int parentIndex = alpha.getParentIndex();
+				Column child = this.getSamples().get(i);
+				// the value from the child's column
+				int k = child.getArrayOfEntries().get(line);
+				// it doesn't have parent -> j = 0 else get the value in that column
+				int j = parentIndex != -1 ? child.getArrayOfEntries().get(parentIndex) : 0;
+				// we have different thetas for each c
+				for (int c = 0; c < s; c++)
+					thetaCs[c] *= this.getTheta()[i][j][k][c];
+			}
+
+			finalEstimationColumnC.add(finalEstimation(thetaCs, s, numberOfEntries));
+		}
+
+		return finalEstimationColumnC;
+	}
+
+	/**
+	 * @param thetaCs
+	 * @param s
+	 * @param numberOfEntries
+	 * @return
+	 */
+	private int finalEstimation(double[] thetaCs, int s, int numberOfEntries) {
+
+		// at this point there's all thetas ijkc multiplied
+		// but we need to multiply thetaC
+		double denominatorEstimationC = 0; // to be easier denominator is always the same
+		for (int c = 0; c < s; c++) {
+			double thetaC = ((double) this.getnC()[c] + 0.5) / ((double) numberOfEntries + s * 0.5);
+			thetaCs[c] *= thetaC;
+			denominatorEstimationC += thetaCs[c];
+		}
+
+		double betterEstimation = 0;
+		int betterIndexC = 0;
+		for (int c = 0; c < s; c++)
+			if ((thetaCs[c] / denominatorEstimationC) > betterEstimation) {
+				betterEstimation = thetaCs[c] / denominatorEstimationC;
+				betterIndexC = c;
+			}
+
+		return betterIndexC;
+	}
+
+	/**
+	 * @param parentList
+	 */
 	private void computeTheta(List<Alpha> parentList) {
 
 		// N'
@@ -120,15 +199,18 @@ public class TestData extends Train {
 			int parentIndex = alpha.getParentIndex();
 			for (int j = 0; j < (parentIndex != -1 ? this.getSamples().get(parentIndex).getR() : 1); j++)
 				for (int k = 0; k < this.getSamples().get(i).getR(); k++)
-					for (int c = 0; c < this.getColumnC().getR(); c++) {
+					for (int c = 0; c < this.getColumnC().getR(); c++)
 						theta[i][j][k][c] = (((double) this.getNijkc()[i][j][k][c] + pseudoCounts)
 								/ (this.getnK()[i][j][c] + (ri * pseudoCounts)));
-					}
+
 		}
 		this.setTheta(theta);
 
 	}
 
+	/**
+	 * @param parentList
+	 */
 	private void computeAllNijkc(List<Alpha> parentList) {
 
 		// Instantiate matrix nIjKc
@@ -180,6 +262,9 @@ public class TestData extends Train {
 
 	}
 
+	/**
+	 * @param parentList
+	 */
 	private void SumKNijc(List<Alpha> parentList) {
 
 		int[][][] nIjc = this.createMatrixNk();
@@ -200,6 +285,9 @@ public class TestData extends Train {
 		this.setnK(nIjc);
 	}
 
+	/**
+	 * 
+	 */
 	private void SumJNikc() {
 
 		int[][][] nIkc = createMatrixNj();
@@ -216,6 +304,9 @@ public class TestData extends Train {
 		this.setnJ(nIkc);
 	}
 
+	/**
+	 * @return
+	 */
 	public int[][][][] createMatrixNijkc() {
 
 		int maxI = this.getSamples().size();
@@ -231,6 +322,9 @@ public class TestData extends Train {
 		return new int[maxI][maxJ][maxK][maxC];
 	}
 
+	/**
+	 * @return
+	 */
 	public double[][][][] createMatrixTheta() {
 
 		int maxI = this.getSamples().size();
@@ -246,6 +340,9 @@ public class TestData extends Train {
 		return new double[maxI][maxJ][maxK][maxC];
 	}
 
+	/**
+	 * @return
+	 */
 	public int[][][] createMatrixNk() {
 
 		int maxI = this.getSamples().size();
@@ -259,6 +356,9 @@ public class TestData extends Train {
 		return new int[maxI][maxJ][maxC];
 	}
 
+	/**
+	 * @return
+	 */
 	public int[][][] createMatrixNj() {
 
 		int maxI = this.getSamples().size();

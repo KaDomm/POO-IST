@@ -9,8 +9,16 @@ import java.util.Iterator;
 import entities.Column;
 import entities.Train;
 
+/**
+ * @author USER-Admin
+ *
+ */
 public class FileControl {
 
+	/**
+	 * @param File
+	 * @return
+	 */
 	public static Train BuildTrainFromFile(String File) {
 
 		Train train = new Train();

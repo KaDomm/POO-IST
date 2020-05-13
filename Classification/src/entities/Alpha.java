@@ -1,5 +1,9 @@
 package entities;
 
+/**
+ * @author USER-Admin
+ *
+ */
 public class Alpha {
 
 	private int parentIndex;
@@ -9,12 +13,9 @@ public class Alpha {
 	private double alpha;
 
 	/**
-	 * @param parent
 	 * @param parentIndex
-	 * @param child
 	 * @param childIndex
 	 * @param alpha
-	 * @param belongTree
 	 */
 	public Alpha(int parentIndex, int childIndex, double alpha) {
 		this.parentIndex = parentIndex;
@@ -22,56 +23,55 @@ public class Alpha {
 		this.alpha = alpha;
 	}
 
+	/**
+	 * @param childIndex
+	 * @param parentIndx
+	 */
 	public Alpha(int childIndex, int parentIndx) {
 		this.parentIndex = parentIndx;
 		this.childIndex = childIndex;
 	}
 
 	/**
-	 * @return the alpha
+	 * @return
 	 */
 	public double getAlpha() {
 		return alpha;
 	}
 
 	/**
-	 * @param alpha the alpha to set
+	 * @param alpha
 	 */
 	public void setAlpha(double alpha) {
 		this.alpha = alpha;
 	}
 
 	/**
-	 * @return the parentIndex
+	 * @return
 	 */
 	public int getParentIndex() {
 		return parentIndex;
 	}
 
 	/**
-	 * @param parentIndex the parentIndex to set
+	 * @param parentIndex
 	 */
 	public void setParentIndex(int parentIndex) {
 		this.parentIndex = parentIndex;
 	}
 
 	/**
-	 * @return the childIndex
+	 * @return
 	 */
 	public int getChildIndex() {
 		return childIndex;
 	}
 
 	/**
-	 * @param childIndex the childIndex to set
+	 * @param childIndex
 	 */
 	public void setChildIndex(int childIndex) {
 		this.childIndex = childIndex;
-	}
-
-	@Override
-	public String toString() {
-		return "[" + parentIndex + "][" + childIndex + "] = " + alpha + "\n";
 	}
 
 }

@@ -9,6 +9,10 @@ import entities.Column;
 import entities.Train;
 import interfaces.CriteriaInterface;
 
+/**
+ * @author USER-Admin
+ *
+ */
 public class AlphaLL implements CriteriaInterface {
 
 	@Override
@@ -46,6 +50,15 @@ public class AlphaLL implements CriteriaInterface {
 
 	}
 
+	/**
+	 * @param train
+	 * @param parentIndex
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param c
+	 * @return
+	 */
 	private Double calcAlpha(final Train train, final int parentIndex, final int i, final int j, final int k,
 			final int c) {
 

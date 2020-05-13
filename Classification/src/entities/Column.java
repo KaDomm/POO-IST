@@ -2,13 +2,16 @@ package entities;
 
 import java.util.ArrayList;
 
+/**
+ * @author USER-Admin
+ *
+ */
 public class Column {
 
 	private String name;
 	private ArrayList<Integer> arrayOfEntries;
 	Integer r = 0;
 
-	// constructors
 	/**
 	 * @param name
 	 * @param arrayOfEntries
@@ -27,7 +30,6 @@ public class Column {
 		super();
 	}
 
-	// getters and setter
 	/**
 	 * @return
 	 */
@@ -68,15 +70,6 @@ public class Column {
 	 */
 	public void setR(Integer r) {
 		this.r = r;
-	}
-
-	@Override
-	public String toString() {
-		String entries = "";
-		for (Integer entrie : arrayOfEntries) {
-			entries = entries + " " + entrie;
-		}
-		return "name: " + name + "  entries:  " + entries + "  r: " + r + "\n";
 	}
 
 }

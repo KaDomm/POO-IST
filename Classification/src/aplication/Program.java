@@ -12,10 +12,16 @@ import utils.AlphaMDL;
 import utils.FileControl;
 import utils.Prim;
 
+/**
+ * @author USER-Admin
+ *
+ */
 public class Program {
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
-
 		// This program must have 3 command-line argument to work with.
 		if (args.length < 3) {
 			System.out.println("Invalid number of input arguments");
@@ -37,62 +43,22 @@ public class Program {
 				: train.getCriteria().equals(Criteria.LL) ? new AlphaLL() : null;
 
 		Long timeBeforeTree = System.nanoTime();
-
+		// calculate alpha for each edge
 		List<Alpha> weightedEdges = alpha.buildWeightedAlpha(train);
-
+		// get MST
 		List<Alpha> parentList = Prim.generateTree(train.getSamples().size(), weightedEdges);
 
 		Long timeAfterTree = System.nanoTime();
 
-		// Instantiate object test
+		// Instantiate object test(read from file)
 		TestData test = new TestData(FileControl.BuildTrainFromFile(args[1]));
 
 		Long timeBeforeTest = System.nanoTime();
-
+		// compute data set
 		List<Integer> resultList = test.generateListOfTheta(parentList);
 
 		Long timeAfterTest = System.nanoTime();
 
-		test.printFinalResult(parentList, timeAfterTree - timeBeforeTree, timeAfterTest - timeBeforeTest);
-
-		// PRINT Nijkc
-		for (Alpha alphas : parentList) {
-
-			int i = alphas.getChildIndex();
-			int parentIndex = alphas.getParentIndex();
-			for (int j = 0; j < (parentIndex != -1 ? test.getSamples().get(parentIndex).getR() : 1); j++)
-				for (int k = 0; k < test.getSamples().get(i).getR(); k++) {
-					for (int c = 0; c < test.getColumnC().getR(); c++)
-						System.out.println("Theta" + (i + 1) + (j + 1) + (k + 1) + (c + 1) + ":"
-								+ test.getTheta()[i][j][k][c] + " ");
-
-					System.out.println("-");
-				}
-			System.out.println();
-		}
-//
-//		// PRINT Sum kNijc
-//		for (int i = 0; i < test.getSamples().size(); i++) {
-//			for (int j = 0; j < (i > 0 ? test.getSamples().get(i - 1).getR() : 1); j++) {
-//				for (int c = 0; c < test.getColumnC().getR(); c++)
-//					System.out.println("NK" + (i + 1) + (j + 1) + (c + 1) + ":" + test.getnK()[i][j][c] + " ");
-//			}
-//			System.out.println("-");
-//		}
-//		System.out.println();
-//
-//		// PRINT sum jNikc
-//		for (int i = 0; i < test.getSamples().size(); i++) {
-//			for (int k = 0; k < test.getSamples().get(i).getR(); k++) {
-//				for (int c = 0; c < test.getColumnC().getR(); c++)
-//					System.out.println("NJ" + (i + 1) + (k + 1) + (c + 1) + ":" + test.getnJ()[i][k][c] + " ");
-//			}
-//			System.out.println("-");
-//		}
-//		System.out.println();
-//
-//		// PRINT nc
-//		for (int c = 0; c < test.getColumnC().getR(); c++)
-//			System.out.println("Nc" + (c + 1) + ":" + test.getnC()[c] + " ");
+		test.printFinalResult(parentList, timeAfterTree - timeBeforeTree, resultList, timeAfterTest - timeBeforeTest);
 	}
 }

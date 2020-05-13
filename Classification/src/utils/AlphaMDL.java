@@ -9,8 +9,15 @@ import entities.Column;
 import entities.Train;
 import interfaces.CriteriaInterface;
 
+/**
+ * @author USER-Admin
+ *
+ */
 public class AlphaMDL implements CriteriaInterface {
 
+	/**
+	 *
+	 */
 	@Override
 	public List<Alpha> buildWeightedAlpha(Train train) {
 
@@ -52,6 +59,15 @@ public class AlphaMDL implements CriteriaInterface {
 
 	}
 
+	/**
+	 * @param train
+	 * @param parentIndex
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param c
+	 * @return
+	 */
 	private Double calcAlpha(final Train train, final int parentIndex, final int i, final int j, final int k,
 			final int c) {
 

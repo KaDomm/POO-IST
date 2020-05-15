@@ -1,5 +1,6 @@
 package utils;
 
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,19 +13,21 @@ import entities.Column;
 public class Utils {
 
 	/**
-	 * @param f
-	 * @return
+	 * @param f value
+	 * @return result
 	 */
 	public static double log2(double f) {
 		return Math.log(f) / Math.log(2.0);
 	}
 
 	/**
-	 * @param resultList
-	 * @param columnC
-	 * @return
+	 * @param resultList resultList
+	 * @param columnC    columnC
+	 * @return resume
 	 */
 	public static String Resume(List<Integer> resultList, Column columnC) {
+
+		DecimalFormat df = new DecimalFormat("0.00");
 
 		double sizeOfColumnC = resultList.size();
 		double right = 0.0;
@@ -53,9 +56,9 @@ public class Utils {
 			}
 
 		}
-		return right / sizeOfColumnC + ", " + trueNegatives / (trueNegatives + falsePositives) + ", "
-				+ truePositives / (truePositives + falseNegatives) + ", "
-				+ 2 * truePositives / (2 * truePositives + falsePositives + falseNegatives);
+		return df.format(right / sizeOfColumnC) + ", " + df.format(trueNegatives / (trueNegatives + falsePositives))
+				+ ", " + df.format(truePositives / (truePositives + falseNegatives)) + ", "
+				+ df.format(2 * truePositives / (2 * truePositives + falsePositives + falseNegatives));
 	}
 
 }

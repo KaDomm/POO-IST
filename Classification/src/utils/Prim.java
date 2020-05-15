@@ -85,9 +85,9 @@ public class Prim {
 	}
 
 	/**
-	 * @param size
-	 * @param listAlphas
-	 * @return
+	 * @param size       size
+	 * @param listAlphas listAlphas
+	 * @return parentList
 	 */
 	public static List<Alpha> generateTree(int size, List<Alpha> listAlphas) {
 

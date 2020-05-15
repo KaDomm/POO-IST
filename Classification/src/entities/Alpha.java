@@ -13,9 +13,9 @@ public class Alpha {
 	private double alpha;
 
 	/**
-	 * @param parentIndex
-	 * @param childIndex
-	 * @param alpha
+	 * @param parentIndex parentIndex
+	 * @param childIndex  childIndex
+	 * @param alpha       alpha
 	 */
 	public Alpha(int parentIndex, int childIndex, double alpha) {
 		this.parentIndex = parentIndex;
@@ -24,8 +24,8 @@ public class Alpha {
 	}
 
 	/**
-	 * @param childIndex
-	 * @param parentIndx
+	 * @param childIndex childIndex
+	 * @param parentIndx parentIndx
 	 */
 	public Alpha(int childIndex, int parentIndx) {
 		this.parentIndex = parentIndx;
@@ -33,42 +33,42 @@ public class Alpha {
 	}
 
 	/**
-	 * @return
+	 * @return alpha
 	 */
 	public double getAlpha() {
 		return alpha;
 	}
 
 	/**
-	 * @param alpha
+	 * @param alpha setAlpha
 	 */
 	public void setAlpha(double alpha) {
 		this.alpha = alpha;
 	}
 
 	/**
-	 * @return
+	 * @return parentIndex
 	 */
 	public int getParentIndex() {
 		return parentIndex;
 	}
 
 	/**
-	 * @param parentIndex
+	 * @param parentIndex set
 	 */
 	public void setParentIndex(int parentIndex) {
 		this.parentIndex = parentIndex;
 	}
 
 	/**
-	 * @return
+	 * @return childIndex
 	 */
 	public int getChildIndex() {
 		return childIndex;
 	}
 
 	/**
-	 * @param childIndex
+	 * @param childIndex set
 	 */
 	public void setChildIndex(int childIndex) {
 		this.childIndex = childIndex;

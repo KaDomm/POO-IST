@@ -37,9 +37,7 @@ public class TestData extends Train {
 	}
 
 	/**
-	 * @param samples
-	 * @param columnC
-	 * @param criteria
+	 * @param train train
 	 */
 	public TestData(Train train) {
 		super(train.getSamples(), train.getColumnC(), train.getCriteria());
@@ -102,8 +100,8 @@ public class TestData extends Train {
 	}
 
 	/**
-	 * @param parentList
-	 * @return
+	 * @param parentList parentList
+	 * @return resultList
 	 */
 	public List<Integer> generateListOfTheta(List<Alpha> parentList) {
 
@@ -307,7 +305,7 @@ public class TestData extends Train {
 	/**
 	 * @return
 	 */
-	public int[][][][] createMatrixNijkc() {
+	private int[][][][] createMatrixNijkc() {
 
 		int maxI = this.getSamples().size();
 		int maxJ = 0;
@@ -325,7 +323,7 @@ public class TestData extends Train {
 	/**
 	 * @return
 	 */
-	public double[][][][] createMatrixTheta() {
+	private double[][][][] createMatrixTheta() {
 
 		int maxI = this.getSamples().size();
 		int maxJ = 0;
@@ -343,7 +341,7 @@ public class TestData extends Train {
 	/**
 	 * @return
 	 */
-	public int[][][] createMatrixNk() {
+	private int[][][] createMatrixNk() {
 
 		int maxI = this.getSamples().size();
 		int maxJ = 0;
@@ -359,7 +357,7 @@ public class TestData extends Train {
 	/**
 	 * @return
 	 */
-	public int[][][] createMatrixNj() {
+	private int[][][] createMatrixNj() {
 
 		int maxI = this.getSamples().size();
 		int maxK = 0;

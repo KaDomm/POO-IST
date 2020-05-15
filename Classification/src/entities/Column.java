@@ -31,42 +31,42 @@ public class Column {
 	}
 
 	/**
-	 * @return
+	 * @return name
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * @param name
+	 * @param name name
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	/**
-	 * @return
+	 * @return arrayOfEntries
 	 */
 	public ArrayList<Integer> getArrayOfEntries() {
 		return arrayOfEntries;
 	}
 
 	/**
-	 * @param arrayOfEntries
+	 * @param arrayOfEntries arrayOfEntries
 	 */
 	public void setArrayOfEntries(ArrayList<Integer> arrayOfEntries) {
 		this.arrayOfEntries = arrayOfEntries;
 	}
 
 	/**
-	 * @return
+	 * @return r
 	 */
 	public Integer getR() {
 		return r;
 	}
 
 	/**
-	 * @param r
+	 * @param r r
 	 */
 	public void setR(Integer r) {
 		this.r = r;

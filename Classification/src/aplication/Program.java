@@ -19,7 +19,7 @@ import utils.Prim;
 public class Program {
 
 	/**
-	 * @param args
+	 * @param args args
 	 */
 	public static void main(String[] args) {
 		// This program must have 3 command-line argument to work with.
@@ -51,7 +51,11 @@ public class Program {
 		Long timeAfterTree = System.nanoTime();
 
 		// Instantiate object test(read from file)
-		TestData test = new TestData(FileControl.BuildTrainFromFile(args[1]));
+		Train testFile = FileControl.BuildTrainFromFile(args[1]);
+		if (testFile == null)
+			return;
+
+		TestData test = new TestData(testFile);
 
 		Long timeBeforeTest = System.nanoTime();
 		// compute data set

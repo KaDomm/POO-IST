@@ -116,12 +116,12 @@ public class Train {
 	}
 
 	/**
-	 * @param parentIndex
-	 * @param i
-	 * @param j
-	 * @param k
-	 * @param c
-	 * @return
+	 * @param parentIndex parentIndex
+	 * @param i           i
+	 * @param j           i
+	 * @param k           i
+	 * @param c           c
+	 * @return nijkc
 	 */
 	public Integer nijkcTwoNodes(final int parentIndex, final int i, final int j, final int k, final int c) {
 
@@ -141,11 +141,11 @@ public class Train {
 	}
 
 	/**
-	 * @param parentIndex
-	 * @param i
-	 * @param k
-	 * @param c
-	 * @return
+	 * @param parentIndex parentIndex
+	 * @param i           i
+	 * @param k           k
+	 * @param c           c
+	 * @return nJikc
 	 */
 	public Integer nJikcTwoNodes(final int parentIndex, final int i, final int k, final int c) {
 
@@ -168,11 +168,11 @@ public class Train {
 	}
 
 	/**
-	 * @param parentIndex
-	 * @param i
-	 * @param j
-	 * @param c
-	 * @return
+	 * @param parentIndex parentIndex
+	 * @param i           i
+	 * @param j           i
+	 * @param c           i
+	 * @return nKijc
 	 */
 	public int nKijcTwoNodes(final int parentIndex, final int i, final int j, final int c) {
 
@@ -195,27 +195,27 @@ public class Train {
 	}
 
 	/**
-	 * @param parentList
-	 * @param firstTime
-	 * @param resultList
-	 * @param lastTime
+	 * @param parentList parentList
+	 * @param firstTime  firstTime
+	 * @param resultList resultList
+	 * @param lastTime   lastTime
 	 */
 	public void printFinalResult(List<Alpha> parentList, long firstTime, List<Integer> resultList, long lastTime) {
 
-		System.out.println("Classifier: \t\t\t" + this.samples.get(parentList.get(0).getChildIndex()).getName() + " :");
+		System.out.println("Classifier: \t\t" + this.samples.get(parentList.get(0).getChildIndex()).getName() + " :");
 		for (int i = 1; i < parentList.size(); i++) {
 			int childIndex = parentList.get(i).getChildIndex();
 			int parentIndex = parentList.get(i).getParentIndex();
-			System.out.println("\t\t\t\t" + this.samples.get(childIndex).getName() + " : "
+			System.out.println("\t\t\t" + this.samples.get(childIndex).getName() + " : "
 					+ this.samples.get(parentIndex).getName());
 		}
 		System.out.println();
-		System.out.println("Time to build: \t\t\t" + firstTime / 1000000.0 + " ms\n");
+		System.out.println("Time to build: \t\t" + firstTime / 1000000.0 + " ms\n");
 		System.out.println("Testing the classifier:");
 		for (int i = 0; i < resultList.size(); i++)
-			System.out.println("-> instance " + i + ":\t\t\t" + resultList.get(i));
+			System.out.println("-> instance " + i + ":\t\t" + resultList.get(i));
 		System.out.println();
-		System.out.println("Time to test: \t\t\t" + lastTime / 1000000.0 + " ms\n");
-		System.out.println("Resume: \t\t\t" + Utils.Resume(resultList, this.getColumnC()));
+		System.out.println("Time to test: \t\t" + lastTime / 1000000.0 + " ms\n");
+		System.out.println("Resume: \t\t" + Utils.Resume(resultList, this.getColumnC()));
 	}
 }

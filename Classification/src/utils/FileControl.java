@@ -16,8 +16,8 @@ import entities.Train;
 public class FileControl {
 
 	/**
-	 * @param File
-	 * @return
+	 * @param File file
+	 * @return train train
 	 */
 	public static Train BuildTrainFromFile(String File) {
 
@@ -73,7 +73,7 @@ public class FileControl {
 			}
 
 		} catch (IOException e) {
-			System.out.println("Error Wrong train file: " + e.getMessage());
+			System.out.println("Error Wrong input file: " + e.getMessage());
 			return null;
 		}
 

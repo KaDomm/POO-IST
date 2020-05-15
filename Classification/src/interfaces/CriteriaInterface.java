@@ -12,8 +12,8 @@ import entities.Train;
 public interface CriteriaInterface {
 
 	/**
-	 * @param train
-	 * @return
+	 * @param train train file information
+	 * @return alpha
 	 */
 	public List<Alpha> buildWeightedAlpha(Train train);
 }
